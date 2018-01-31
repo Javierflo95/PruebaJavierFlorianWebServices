@@ -13,7 +13,6 @@ namespace WsTask.test.UniTests
         [TestMethod]
         public void CreateTask()
         {
-
             Task otblTask = new Task()
             {
                 nombre = "Tarea Unit Test",
