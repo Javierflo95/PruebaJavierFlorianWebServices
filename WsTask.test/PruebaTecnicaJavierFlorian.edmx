@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PruebaTecnicaJavierFlorianModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblTask">
+          <Key>
+            <PropertyRef Name="ta_TareaPk" />
+          </Key>
+          <Property Name="ta_TareaPk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ta_Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="te_Estado" Type="bit" Nullable="false" />
+          <Property Name="te_FechaCreacion" Type="date" />
+          <Property Name="te_Descripcion" Type="nvarchar" MaxLength="50" />
+          <Property Name="te_FechaVencimiento" Type="date" />
+          <Property Name="te_UsuarioFk" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblUsers">
+          <Key>
+            <PropertyRef Name="us_Users_Pk" />
+          </Key>
+          <Property Name="us_Users_Pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="us_UserName" Type="varchar(max)" />
+          <Property Name="us_Name" Type="varchar(max)" />
+          <Property Name="us_LastName" Type="varchar(max)" />
+          <Property Name="us_Age" Type="int" Nullable="false" />
+          <Property Name="us_Estado" Type="bit" Nullable="false" />
+          <Property Name="us_Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="us_CreateTask" Type="bit" />
+        </EntityType>
+        <Association Name="FK_tblTask_tblUsers">
+          <End Role="tblUsers" Type="Self.tblUsers" Multiplicity="1" />
+          <End Role="tblTask" Type="Self.tblTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsers">
+              <PropertyRef Name="us_Users_Pk" />
+            </Principal>
+            <Dependent Role="tblTask">
+              <PropertyRef Name="te_UsuarioFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PruebaTecnicaJavierFlorianModelStoreContainer">
+          <EntitySet Name="tblTask" EntityType="Self.tblTask" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUsers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblTask_tblUsers" Association="Self.FK_tblTask_tblUsers">
+            <End Role="tblUsers" EntitySet="tblUsers" />
+            <End Role="tblTask" EntitySet="tblTask" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PruebaTecnicaJavierFlorianModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblTask">
+          <Key>
+            <PropertyRef Name="ta_TareaPk" />
+          </Key>
+          <Property Name="ta_TareaPk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ta_Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="te_Estado" Type="Boolean" Nullable="false" />
+          <Property Name="te_FechaCreacion" Type="DateTime" Precision="0" />
+          <Property Name="te_Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="te_FechaVencimiento" Type="DateTime" Precision="0" />
+          <Property Name="te_UsuarioFk" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblUsers" Relationship="Self.FK_tblTask_tblUsers" FromRole="tblTask" ToRole="tblUsers" />
+        </EntityType>
+        <EntityType Name="tblUsers">
+          <Key>
+            <PropertyRef Name="us_Users_Pk" />
+          </Key>
+          <Property Name="us_Users_Pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="us_UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="us_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="us_LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="us_Age" Type="Int32" Nullable="false" />
+          <Property Name="us_Estado" Type="Boolean" Nullable="false" />
+          <Property Name="us_Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="us_CreateTask" Type="Boolean" />
+          <NavigationProperty Name="tblTask" Relationship="Self.FK_tblTask_tblUsers" FromRole="tblUsers" ToRole="tblTask" />
+        </EntityType>
+        <Association Name="FK_tblTask_tblUsers">
+          <End Role="tblUsers" Type="Self.tblUsers" Multiplicity="1" />
+          <End Role="tblTask" Type="Self.tblTask" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsers">
+              <PropertyRef Name="us_Users_Pk" />
+            </Principal>
+            <Dependent Role="tblTask">
+              <PropertyRef Name="te_UsuarioFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PruebaTecnicaJavierFlorianEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblTask" EntityType="Self.tblTask" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUsers" />
+          <AssociationSet Name="FK_tblTask_tblUsers" Association="Self.FK_tblTask_tblUsers">
+            <End Role="tblUsers" EntitySet="tblUsers" />
+            <End Role="tblTask" EntitySet="tblTask" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PruebaTecnicaJavierFlorianModelStoreContainer" CdmEntityContainer="PruebaTecnicaJavierFlorianEntities">
+          <EntitySetMapping Name="tblTask">
+            <EntityTypeMapping TypeName="PruebaTecnicaJavierFlorianModel.tblTask">
+              <MappingFragment StoreEntitySet="tblTask">
+                <ScalarProperty Name="ta_TareaPk" ColumnName="ta_TareaPk" />
+                <ScalarProperty Name="ta_Nombre" ColumnName="ta_Nombre" />
+                <ScalarProperty Name="te_Estado" ColumnName="te_Estado" />
+                <ScalarProperty Name="te_FechaCreacion" ColumnName="te_FechaCreacion" />
+                <ScalarProperty Name="te_Descripcion" ColumnName="te_Descripcion" />
+                <ScalarProperty Name="te_FechaVencimiento" ColumnName="te_FechaVencimiento" />
+                <ScalarProperty Name="te_UsuarioFk" ColumnName="te_UsuarioFk" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="PruebaTecnicaJavierFlorianModel.tblUsers">
+              <MappingFragment StoreEntitySet="tblUsers">
+                <ScalarProperty Name="us_Users_Pk" ColumnName="us_Users_Pk" />
+                <ScalarProperty Name="us_UserName" ColumnName="us_UserName" />
+                <ScalarProperty Name="us_Name" ColumnName="us_Name" />
+                <ScalarProperty Name="us_LastName" ColumnName="us_LastName" />
+                <ScalarProperty Name="us_Age" ColumnName="us_Age" />
+                <ScalarProperty Name="us_Estado" ColumnName="us_Estado" />
+                <ScalarProperty Name="us_Password" ColumnName="us_Password" />
+                <ScalarProperty Name="us_CreateTask" ColumnName="us_CreateTask" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
