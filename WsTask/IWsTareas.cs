@@ -27,9 +27,9 @@ namespace WsTask
         void DeleteUser(User oUser);
         //Tasks
         [OperationContract]
-        void CreateTask(Entities.Task oTask, Entities.User oUser);
+        Entities.Task CreateTask(Entities.Task oTask, Entities.User oUser);
         [OperationContract]
-        void EditTask(Task oTask);
+        Entities.Task EditTask(Task oTask);
         [OperationContract]
         Task GetTask(Task oTask);
         [OperationContract]

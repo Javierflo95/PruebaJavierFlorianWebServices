@@ -107,12 +107,12 @@ namespace WsTask
         #region IWsTareas Members Task
 
 
-        public void CreateTask(Task oTask, User oUser)
+        public Entities.Task CreateTask(Task oTask, User oUser)
         {
             try
             {
                 oITareas = new Tareas();
-                oITareas.CreateTask(oTask, oUser);
+                return oITareas.CreateTask(oTask, oUser);
             }
             catch (Exception ex)
             {
@@ -120,12 +120,12 @@ namespace WsTask
             }
         }
 
-        public void EditTask(Task oTask)
+        public Entities.Task EditTask(Task oTask)
         {
             try
             {
                 oITareas = new Tareas();
-                oITareas.EditTask(oTask);
+                return oITareas.EditTask(oTask);
             }
             catch (Exception ex)
             {

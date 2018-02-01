@@ -17,7 +17,7 @@ namespace Repository.Repositories
         /// </summary>
         /// <param name="oTask">Objeto tarea</param>
         /// <param name="oUser">Objeto usaurio</param>
-        public void CreateTask(Entities.Task oTask, Entities.User oUser)
+        public Entities.Task CreateTask(Entities.Task oTask, Entities.User oUser)
         {
             try
             {
@@ -40,16 +40,19 @@ namespace Repository.Repositories
                     te_FechaVencimiento = _dateEnd,
                     te_UsuarioFk = idUser
                 };
+
                 using (PruebaTecnicaJavierFlorianEntities ctx = new PruebaTecnicaJavierFlorianEntities())
                 {
-                    ctx.tblTask.Add(otblTask);
+                    var _tareaNueva = ctx.tblTask.Add(otblTask);
                     ctx.SaveChanges();
+                    oTask.id = _tareaNueva.ta_TareaPk.ToString();
+                    return oTask;
                 }
 
             }
             catch (Exception ex)
             {
-                throw;
+                return oTask;
             }
         }
 
@@ -57,7 +60,7 @@ namespace Repository.Repositories
         /// Actualiza 
         /// </summary>
         /// <param name="oTask"></param>
-        public void EditTask(Entities.Task oTask)
+        public Entities.Task EditTask(Entities.Task oTask)
         {
             try
             {
@@ -85,6 +88,8 @@ namespace Repository.Repositories
                     otblTask.te_FechaVencimiento = _dateEnd;
 
                     ctx.SaveChanges();
+
+                    return oTask;
                 }
 
             }
@@ -172,7 +177,7 @@ namespace Repository.Repositories
                     if (oTask != null && oTask.user != null)
                     {
                         #region listado de tareas por usduario
-                        listtblTask = ctx.tblTask.Where(u => u.te_UsuarioFk == _idUser).ToList();
+                        listtblTask = ctx.tblTask.Where(u => u.te_UsuarioFk == _idUser).OrderBy(f => f.te_FechaVencimiento).ToList();
 
                         if (listtblTask != null || listtblTask.Count() > 0)
                         {
@@ -189,7 +194,7 @@ namespace Repository.Repositories
                                 });
                             }
 
-                        } 
+                        }
                         #endregion
                     }
                     else if (oTask != null)
@@ -212,7 +217,7 @@ namespace Repository.Repositories
                                 });
                             }
 
-                        } 
+                        }
                     }
                     else
                     {
@@ -234,7 +239,7 @@ namespace Repository.Repositories
                                 });
                             }
 
-                        }    
+                        }
                     }
                 }
 

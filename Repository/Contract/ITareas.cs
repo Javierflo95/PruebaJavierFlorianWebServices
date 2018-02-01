@@ -9,7 +9,7 @@ namespace Repository.Contract
 {
     public interface ITareas
     {
-        void CreateTask(Entities.Task oTask, User oUser);
+        Entities.Task CreateTask(Entities.Task oTask, User oUser);
         void EditTask(Entities.Task oTask);
         Entities.Task GetTask(Entities.Task oTask);
         List<Entities.Task> ListTaskbyState(Entities.Task oTask);
