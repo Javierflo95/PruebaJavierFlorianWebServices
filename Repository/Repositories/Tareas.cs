@@ -221,7 +221,7 @@ namespace Repository.Repositories
                     }
                     else
                     {
-                        //Trae las tareas segun el estado de finalizacion 
+                        //Trae todas las tareas que esten activas  
                         listtblTask = ctx.tblTask.Where(u => u.te_Estado == true).ToList();
 
                         if (listtblTask != null || listtblTask.Count() > 0)
