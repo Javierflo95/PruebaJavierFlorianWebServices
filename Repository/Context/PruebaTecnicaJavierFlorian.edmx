@@ -16,6 +16,7 @@
           <Property Name="te_Descripcion" Type="nvarchar" MaxLength="50" />
           <Property Name="te_FechaVencimiento" Type="date" />
           <Property Name="te_UsuarioFk" Type="int" Nullable="false" />
+          <Property Name="te_Finalizada" Type="bit" />
         </EntityType>
         <EntityType Name="tblUsers">
           <Key>
@@ -30,25 +31,9 @@
           <Property Name="us_Password" Type="nvarchar(max)" Nullable="false" />
           <Property Name="us_CreateTask" Type="bit" />
         </EntityType>
-        <Association Name="FK_tblTask_tblUsers">
-          <End Role="tblUsers" Type="Self.tblUsers" Multiplicity="1" />
-          <End Role="tblTask" Type="Self.tblTask" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblUsers">
-              <PropertyRef Name="us_Users_Pk" />
-            </Principal>
-            <Dependent Role="tblTask">
-              <PropertyRef Name="te_UsuarioFk" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="PruebaTecnicaJavierFlorianModelStoreContainer">
           <EntitySet Name="tblTask" EntityType="Self.tblTask" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblUsers" EntityType="Self.tblUsers" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_tblTask_tblUsers" Association="Self.FK_tblTask_tblUsers">
-            <End Role="tblUsers" EntitySet="tblUsers" />
-            <End Role="tblTask" EntitySet="tblTask" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -66,6 +51,7 @@
           <Property Name="te_FechaVencimiento" Type="DateTime" Precision="0" />
           <Property Name="te_UsuarioFk" Type="Int32" Nullable="false" />
           <NavigationProperty Name="tblUsers" Relationship="PruebaTecnicaJavierFlorianModel.FK_tblTask_tblUsers" FromRole="tblTask" ToRole="tblUsers" />
+          <Property Name="te_Finalizada" Type="Boolean" />
         </EntityType>
         <EntityContainer Name="PruebaTecnicaJavierFlorianEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tblTask" EntityType="Self.tblTask" />
@@ -110,6 +96,7 @@
           <EntitySetMapping Name="tblTask">
             <EntityTypeMapping TypeName="PruebaTecnicaJavierFlorianModel.tblTask">
               <MappingFragment StoreEntitySet="tblTask">
+                <ScalarProperty Name="te_Finalizada" ColumnName="te_Finalizada" />
                 <ScalarProperty Name="ta_TareaPk" ColumnName="ta_TareaPk" />
                 <ScalarProperty Name="ta_Nombre" ColumnName="ta_Nombre" />
                 <ScalarProperty Name="te_Estado" ColumnName="te_Estado" />

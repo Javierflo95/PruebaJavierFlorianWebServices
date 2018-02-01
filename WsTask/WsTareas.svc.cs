@@ -146,12 +146,12 @@ namespace WsTask
             }
         }
 
-        public List<Task> ListTasks()
+        public List<Task> ListTasks(Entities.Task oTask)
         {
             try
             {
                 oITareas = new Tareas();
-                return oITareas.ListTasks();
+                return oITareas.ListTaskbyState(oTask);
             }
             catch (Exception ex)
             {

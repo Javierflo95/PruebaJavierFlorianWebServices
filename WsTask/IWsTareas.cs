@@ -33,7 +33,7 @@ namespace WsTask
         [OperationContract]
         Task GetTask(Task oTask);
         [OperationContract]
-        List<Task> ListTasks();
+        List<Task> ListTasks(Entities.Task oTask);
         [OperationContract]
         void DeleteTask(Task oTask);
 

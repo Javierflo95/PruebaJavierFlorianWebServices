@@ -21,6 +21,7 @@ namespace Repository.Context
         public string te_Descripcion { get; set; }
         public Nullable<System.DateTime> te_FechaVencimiento { get; set; }
         public int te_UsuarioFk { get; set; }
+        public Nullable<bool> te_Finalizada { get; set; }
     
         public virtual tblUsers tblUsers { get; set; }
     }

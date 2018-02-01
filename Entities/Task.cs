@@ -23,6 +23,8 @@ namespace Entities
         [DataMember]
         public string fechaVencimiento { get; set; }
         [DataMember]
+        public string finalizada { get; set; }
+        [DataMember]
         public User user { get; set; }
 
     }

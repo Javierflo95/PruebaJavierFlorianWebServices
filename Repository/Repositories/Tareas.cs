@@ -12,6 +12,11 @@ namespace Repository.Repositories
     {
         #region ITareas Members
 
+        /// <summary>
+        /// Crea la tarea
+        /// </summary>
+        /// <param name="oTask">Objeto tarea</param>
+        /// <param name="oUser">Objeto usaurio</param>
         public void CreateTask(Entities.Task oTask, Entities.User oUser)
         {
             try
@@ -48,6 +53,10 @@ namespace Repository.Repositories
             }
         }
 
+        /// <summary>
+        /// Actualiza 
+        /// </summary>
+        /// <param name="oTask"></param>
         public void EditTask(Entities.Task oTask)
         {
             try
@@ -134,41 +143,114 @@ namespace Repository.Repositories
             }
         }
 
-        public List<Entities.Task> ListTasks()
+        /// <summary>
+        /// Metodo en cargado de la consulta de las tareas por usuario, y estado de finalizacion
+        /// </summary>
+        /// <param name="oTask"></param>
+        /// <returns></returns>
+        public List<Entities.Task> ListTaskbyState(Entities.Task oTask)
         {
+            int idTarea = 0;
+            int.TryParse(oTask.id, out idTarea);
+
+            tblUsers otblUsers = new tblUsers();
+            List<tblTask> listtblTask = new List<tblTask>();
+            List<Entities.Task> listTareas = new List<Entities.Task>();
+
+            int _idUser = 0;
+            int.TryParse(oTask.user.id, out _idUser);
+
+            bool _finalizada = false;
+            bool.TryParse(oTask.finalizada, out _finalizada);
+
             try
             {
-                List<Entities.Task> listTasks = new List<Entities.Task>();
+
                 using (PruebaTecnicaJavierFlorianEntities ctx = new PruebaTecnicaJavierFlorianEntities())
                 {
-                    listTasks = (from t in ctx.tblTask
-                                 join u in ctx.tblUsers on t.te_UsuarioFk equals u.us_Users_Pk
-                                 where t.te_Estado == true
-                                 select new Entities.Task()
-                                 {
-                                     id = t.ta_TareaPk.ToString(),
-                                     nombre = t.ta_Nombre,
-                                     descripcion = t.te_Descripcion,
-                                     estado = t.te_Estado.ToString(),
-                                     fechaCreacion = t.te_FechaCreacion.ToString(),
-                                     fechaVencimiento = t.te_FechaVencimiento.ToString(),
-                                     user = new Entities.User() 
-                                     {
-                                         id = u.us_Users_Pk.ToString(),
-                                         userName  = u.us_UserName
-                                     }
-                                 }).ToList();
+                    //Trae el listado de tareas por usduario (Mis tareas)
+                    if (oTask != null && oTask.user != null)
+                    {
+                        #region listado de tareas por usduario
+                        listtblTask = ctx.tblTask.Where(u => u.te_UsuarioFk == _idUser).ToList();
+
+                        if (listtblTask != null || listtblTask.Count() > 0)
+                        {
+                            foreach (var tarea in listtblTask)
+                            {
+                                listTareas.Add(new Entities.Task()
+                                {
+                                    id = tarea.ta_TareaPk.ToString(),
+                                    nombre = tarea.ta_Nombre,
+                                    descripcion = tarea.te_Descripcion,
+                                    fechaCreacion = (tarea.te_FechaCreacion == null) ? DateTime.Now.ToString() : tarea.te_FechaCreacion.ToString(),
+                                    fechaVencimiento = (tarea.te_FechaVencimiento == null) ? DateTime.Now.ToString() : tarea.te_FechaVencimiento.ToString(),
+                                    estado = tarea.te_Estado.ToString()
+                                });
+                            }
+
+                        } 
+                        #endregion
+                    }
+                    else if (oTask != null)
+                    {
+                        //Trae las tareas segun el estado de finalizacion 
+                        listtblTask = ctx.tblTask.Where(u => u.te_Finalizada == _finalizada).ToList();
+
+                        if (listtblTask != null || listtblTask.Count() > 0)
+                        {
+                            foreach (var tarea in listtblTask)
+                            {
+                                listTareas.Add(new Entities.Task()
+                                {
+                                    id = tarea.ta_TareaPk.ToString(),
+                                    nombre = tarea.ta_Nombre,
+                                    descripcion = tarea.te_Descripcion,
+                                    fechaCreacion = (tarea.te_FechaCreacion == null) ? DateTime.Now.ToString() : tarea.te_FechaCreacion.ToString(),
+                                    fechaVencimiento = (tarea.te_FechaVencimiento == null) ? DateTime.Now.ToString() : tarea.te_FechaVencimiento.ToString(),
+                                    estado = tarea.te_Estado.ToString()
+                                });
+                            }
+
+                        } 
+                    }
+                    else
+                    {
+                        //Trae las tareas segun el estado de finalizacion 
+                        listtblTask = ctx.tblTask.Where(u => u.te_Estado == true).ToList();
+
+                        if (listtblTask != null || listtblTask.Count() > 0)
+                        {
+                            foreach (var tarea in listtblTask)
+                            {
+                                listTareas.Add(new Entities.Task()
+                                {
+                                    id = tarea.ta_TareaPk.ToString(),
+                                    nombre = tarea.ta_Nombre,
+                                    descripcion = tarea.te_Descripcion,
+                                    fechaCreacion = (tarea.te_FechaCreacion == null) ? DateTime.Now.ToString() : tarea.te_FechaCreacion.ToString(),
+                                    fechaVencimiento = (tarea.te_FechaVencimiento == null) ? DateTime.Now.ToString() : tarea.te_FechaVencimiento.ToString(),
+                                    estado = tarea.te_Estado.ToString()
+                                });
+                            }
+
+                        }    
+                    }
                 }
 
-                return listTasks;
+                return listTareas;
 
             }
             catch (Exception ex)
             {
-                throw;
+                return listTareas;
             }
         }
 
+        /// <summary>
+        /// Eliminar Tarea
+        /// </summary>
+        /// <param name="oTask">Objeto Task</param>
         public void DeleteTask(Entities.Task oTask)
         {
             try
@@ -183,7 +265,7 @@ namespace Repository.Repositories
                     otblTask = ctx.tblTask.Where(u => u.ta_TareaPk == idTarea).FirstOrDefault();
                     otblTask.te_Estado = false;
                     ctx.SaveChanges();
-                    
+
                 }
             }
             catch (Exception ex)

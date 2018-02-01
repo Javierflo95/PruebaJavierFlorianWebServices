@@ -12,7 +12,8 @@ namespace Repository.Contract
         void CreateTask(Entities.Task oTask, User oUser);
         void EditTask(Entities.Task oTask);
         Entities.Task GetTask(Entities.Task oTask);
-        List<Entities.Task> ListTasks();
-        void DeleteTask(Entities.Task oTask);
+        List<Entities.Task> ListTaskbyState(Entities.Task oTask);
+        void DeleteTask(Entities.Task oTask);      
     }
 }
+
