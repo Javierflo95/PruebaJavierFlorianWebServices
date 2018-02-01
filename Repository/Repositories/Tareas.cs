@@ -95,7 +95,7 @@ namespace Repository.Repositories
             }
             catch (Exception ex)
             {
-                throw;
+                return oTask;
             }
         }
 
@@ -221,7 +221,7 @@ namespace Repository.Repositories
                     }
                     else
                     {
-                        //Trae todas las tareas que esten activas  
+                        //Trae todas las tareas que esten activas 
                         listtblTask = ctx.tblTask.Where(u => u.te_Estado == true).ToList();
 
                         if (listtblTask != null || listtblTask.Count() > 0)
