@@ -177,7 +177,7 @@ namespace Repository.Repositories
                 using (PruebaTecnicaJavierFlorianEntities ctx = new PruebaTecnicaJavierFlorianEntities())
                 {
                     //Trae el listado de tareas por usduario (Mis tareas)
-                    if (oTask.id != null && oTask.user != null)
+                    if (oTask != null && oTask.user != null)
                     {
                         #region listado de tareas por usduario
                         var user = ctx.tblUsers.Where(u => u.us_UserName == oTask.user.userName).FirstOrDefault();
@@ -195,14 +195,15 @@ namespace Repository.Repositories
                                     descripcion = tarea.te_Descripcion,
                                     fechaCreacion = (tarea.te_FechaCreacion == null) ? DateTime.Now.ToString() : tarea.te_FechaCreacion.ToString(),
                                     fechaVencimiento = (tarea.te_FechaVencimiento == null) ? DateTime.Now.ToString() : tarea.te_FechaVencimiento.ToString(),
-                                    estado = tarea.te_Estado.ToString()
+                                    estado = tarea.te_Estado.ToString(),
+                                    user = new Entities.User() { id = user.us_Users_Pk.ToString(), userName = user.us_UserName }
                                 });
                             }
 
                         }
                         #endregion
                     }
-                    else if (oTask.id != null)
+                    else if (oTask != null)
                     {
                         //Trae las tareas segun el estado de finalizacion 
                         listtblTask = ctx.tblTask.Where(u => u.te_Finalizada == _finalizada).ToList();
