@@ -156,7 +156,9 @@ namespace Repository.Repositories
         public List<Entities.Task> ListTaskbyState(Entities.Task oTask)
         {
             int idTarea = 0;
-            int.TryParse(oTask.id, out idTarea);
+            bool _finalizada = false;
+            int _idUser = 0;
+           
 
             tblUsers otblUsers = new tblUsers();
             List<tblTask> listtblTask = new List<tblTask>();
@@ -164,10 +166,8 @@ namespace Repository.Repositories
 
             if (oTask != null)
             {
-                int _idUser = 0;
                 int.TryParse(oTask.user.id, out _idUser);
-
-                bool _finalizada = false;
+                int.TryParse(oTask.id, out idTarea);
                 bool.TryParse(oTask.finalizada, out _finalizada);
             }
 
