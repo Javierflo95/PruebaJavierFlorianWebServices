@@ -21,28 +21,32 @@ namespace Repository.Repositories
         {
             try
             {
-                int idUser = 0;
-                int.TryParse(oUser.id, out idUser);
-
                 DateTime _dateStart = DateTime.Now;
                 DateTime.TryParse(oTask.fechaCreacion, out _dateStart);
 
                 DateTime _dateEnd = DateTime.Now;
                 DateTime.TryParse(oTask.fechaVencimiento, out _dateEnd);
 
-
-                tblTask otblTask = new tblTask()
-                {
-                    ta_Nombre = oTask.nombre,
-                    te_Descripcion = oTask.descripcion,
-                    te_Estado = true,
-                    te_FechaCreacion = _dateStart,
-                    te_FechaVencimiento = _dateEnd,
-                    te_UsuarioFk = idUser
-                };
+                tblUsers otblUsers = new tblUsers();
 
                 using (PruebaTecnicaJavierFlorianEntities ctx = new PruebaTecnicaJavierFlorianEntities())
                 {
+
+                    if (oUser != null && oUser.userName != null)
+                    {
+                        otblUsers = ctx.tblUsers.Where(u => u.us_UserName == oUser.userName).FirstOrDefault();
+                    }
+
+                    tblTask otblTask = new tblTask()
+                    {
+                        ta_Nombre = oTask.nombre,
+                        te_Descripcion = oTask.descripcion,
+                        te_Estado = true,
+                        te_FechaCreacion = _dateStart,
+                        te_FechaVencimiento = _dateEnd,
+                        te_UsuarioFk = otblUsers.us_Users_Pk
+                    };
+
                     var _tareaNueva = ctx.tblTask.Add(otblTask);
                     ctx.SaveChanges();
                     oTask.id = _tareaNueva.ta_TareaPk.ToString();
@@ -157,8 +161,7 @@ namespace Repository.Repositories
         {
             int idTarea = 0;
             bool _finalizada = false;
-            int _idUser = 0;
-           
+
 
             tblUsers otblUsers = new tblUsers();
             List<tblTask> listtblTask = new List<tblTask>();
@@ -166,7 +169,6 @@ namespace Repository.Repositories
 
             if (oTask != null)
             {
-                int.TryParse(oTask.user.id, out _idUser);
                 int.TryParse(oTask.id, out idTarea);
                 bool.TryParse(oTask.finalizada, out _finalizada);
             }
@@ -180,6 +182,7 @@ namespace Repository.Repositories
                     if (oTask != null && oTask.user != null)
                     {
                         #region listado de tareas por usduario
+
                         var user = ctx.tblUsers.Where(u => u.us_UserName == oTask.user.userName).FirstOrDefault();
 
                         listtblTask = ctx.tblTask.Where(u => u.te_UsuarioFk == user.us_Users_Pk).OrderBy(f => f.te_FechaVencimiento).ToList();
@@ -206,12 +209,14 @@ namespace Repository.Repositories
                     else if (oTask != null)
                     {
                         //Trae las tareas segun el estado de finalizacion 
-                        listtblTask = ctx.tblTask.Where(u => u.te_Finalizada == _finalizada).ToList();
+                        listtblTask = ctx.tblTask.Where(u => u.te_Finalizada == _finalizada).OrderBy(f => f.te_FechaVencimiento).ToList();
 
                         if (listtblTask != null || listtblTask.Count() > 0)
                         {
                             foreach (var tarea in listtblTask)
                             {
+                                var user = ctx.tblUsers.Where(u => u.us_Users_Pk == tarea.te_UsuarioFk).FirstOrDefault();
+
                                 listTareas.Add(new Entities.Task()
                                 {
                                     id = tarea.ta_TareaPk.ToString(),
@@ -219,7 +224,8 @@ namespace Repository.Repositories
                                     descripcion = tarea.te_Descripcion,
                                     fechaCreacion = (tarea.te_FechaCreacion == null) ? DateTime.Now.ToString() : tarea.te_FechaCreacion.ToString(),
                                     fechaVencimiento = (tarea.te_FechaVencimiento == null) ? DateTime.Now.ToString() : tarea.te_FechaVencimiento.ToString(),
-                                    estado = tarea.te_Estado.ToString()
+                                    estado = tarea.te_Estado.ToString(),
+                                    user = new Entities.User() { id = user.us_Users_Pk.ToString(), userName = user.us_UserName }
                                 });
                             }
 
@@ -228,7 +234,7 @@ namespace Repository.Repositories
                     else
                     {
                         //Trae todas las tareas que esten activas 
-                        listtblTask = ctx.tblTask.Where(u => u.te_Estado == true).ToList();
+                        listtblTask = ctx.tblTask.Where(u => u.te_Estado == true).OrderBy(f => f.te_FechaVencimiento).ToList();
 
                         if (listtblTask != null || listtblTask.Count() > 0)
                         {
