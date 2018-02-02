@@ -162,11 +162,14 @@ namespace Repository.Repositories
             List<tblTask> listtblTask = new List<tblTask>();
             List<Entities.Task> listTareas = new List<Entities.Task>();
 
-            int _idUser = 0;
-            int.TryParse(oTask.user.id, out _idUser);
+            if (oTask != null)
+            {
+                int _idUser = 0;
+                int.TryParse(oTask.user.id, out _idUser);
 
-            bool _finalizada = false;
-            bool.TryParse(oTask.finalizada, out _finalizada);
+                bool _finalizada = false;
+                bool.TryParse(oTask.finalizada, out _finalizada);
+            }
 
             try
             {
@@ -177,7 +180,9 @@ namespace Repository.Repositories
                     if (oTask.id != null && oTask.user != null)
                     {
                         #region listado de tareas por usduario
-                        listtblTask = ctx.tblTask.Where(u => u.te_UsuarioFk == _idUser).OrderBy(f => f.te_FechaVencimiento).ToList();
+                        var user = ctx.tblUsers.Where(u => u.us_UserName == oTask.user.userName).FirstOrDefault();
+
+                        listtblTask = ctx.tblTask.Where(u => u.te_UsuarioFk == user.us_Users_Pk).OrderBy(f => f.te_FechaVencimiento).ToList();
 
                         if (listtblTask != null || listtblTask.Count() > 0)
                         {
